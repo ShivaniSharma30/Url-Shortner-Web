@@ -71,6 +71,10 @@ const linksSlice = createSlice({
   name: 'links',
   initialState,
   reducers: {
+    resetCreateStatus(state) {
+      state.createStatus = 'idle'
+      state.createError = null
+    },
     clearLinks(state) {
       state.items = []
       state.pagination = emptyPagination
@@ -126,5 +130,5 @@ const linksSlice = createSlice({
   },
 })
 
-export const { clearLinks } = linksSlice.actions
+export const { clearLinks, resetCreateStatus } = linksSlice.actions
 export default linksSlice.reducer
