@@ -24,3 +24,20 @@ export interface Link {
   expiresAt: string | null
   createdAt: string
 }
+
+export interface Pagination {
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+}
+
+export interface LinksListData {
+  items: Link[]
+  pagination: Pagination
+}
+
+export interface CreateLinkPayload {
+  originalUrl: string
+  title?: string
+}
