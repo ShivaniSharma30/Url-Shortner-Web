@@ -1,75 +1,203 @@
-# React + TypeScript + Vite
+# URL Shortener Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React dashboard for the [URL Shortener API](../Url-Shortner). Register organizations, manage short links, and track click analytics — with multi-tenant isolation via API keys.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Overview
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+This is the **frontend** companion to the backend API. Each organization (tenant) signs up, receives an API key, and uses the dashboard to shorten URLs, view links, and monitor clicks.
 
 ```
+┌─────────────────────┐         ┌─────────────────────┐
+│  Url-Shortner-Web   │  Axios  │    Url-Shortner     │
+│  (React Dashboard)  │ ──────► │  (Express REST API) │
+│  localhost:5173     │         │  localhost:3000     │
+└─────────────────────┘         └─────────────────────┘
+```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Features
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Feature | Status |
+|---------|--------|
+| Organization registration | Done |
+| API key login & session persistence | Done |
+| User profile page | Done |
+| Create short links | Done |
+| List links with click counts | Done |
+| Copy short URL | Done |
+| Delete links | Done |
+| Dashboard stats (total links & clicks) | Done |
+| Shared header with branding | Done |
+| Protected routes | Done |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | React 19 + TypeScript |
+| Build tool | Vite 8 |
+| Styling | Tailwind CSS 4 + DaisyUI |
+| State | Redux Toolkit |
+| HTTP client | Axios |
+| Routing | React Router 7 |
+
+---
+
+## Prerequisites
+
+- Node.js 18+
+- Backend API running at `http://localhost:3000` ([setup guide](../Url-Shortner/README.md))
+
+---
+
+## Getting Started
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+```bash
+cp .env.example .env
+```
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api/v1
+```
+
+### 3. Start the dev server
+
+```bash
+npm run dev
+```
+
+Open **http://localhost:5173**
+
+### 4. Run with backend (two terminals)
+
+**Terminal 1 — Backend:**
+```bash
+cd ../Url-Shortner
+npm run dev
+```
+
+**Terminal 2 — Frontend:**
+```bash
+cd ../Url-Shortner-Web
+npm run dev
+```
+
+---
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint |
+
+---
+
+## Pages & Routes
+
+| Route | Access | Description |
+|-------|--------|-------------|
+| `/register` | Public | Create organization account |
+| `/login` | Public | Sign in with API key |
+| `/dashboard` | Protected | Stats, create link, links table |
+| `/profile` | Protected | Organization profile details |
+
+---
+
+## API Integration
+
+All requests go through `src/api/axios.ts`. The API key is sent automatically as `X-API-Key` on protected routes.
+
+| Frontend action | Backend endpoint |
+|-----------------|------------------|
+| Register | `POST /api/v1/tenants` |
+| Login / profile | `GET /api/v1/tenants/me` |
+| Create link | `POST /api/v1/links` |
+| List links | `GET /api/v1/links` |
+| Delete link | `DELETE /api/v1/links/:shortCode` |
+| Open short URL | `GET /:shortCode` (backend redirect) |
+
+---
+
+## Project Structure
 
 ```
+src/
+├── api/
+│   ├── axios.ts          # Axios client + API key interceptor
+│   ├── tenants.ts        # Register & profile APIs
+│   └── links.ts          # Link CRUD APIs
+├── components/
+│   ├── Header.tsx        # Shared navbar (logo, profile, logout)
+│   ├── AuthLayout.tsx    # Split layout for sign-in / sign-up
+│   ├── AppLayout.tsx     # Layout for dashboard pages
+│   ├── ProtectedRoute.tsx
+│   ├── StatsCards.tsx
+│   ├── CreateLinkForm.tsx
+│   └── LinksTable.tsx
+├── pages/
+│   ├── RegisterPage.tsx
+│   ├── LoginPage.tsx
+│   ├── DashboardPage.tsx
+│   └── ProfilePage.tsx
+├── store/
+│   ├── slices/
+│   │   ├── authSlice.ts  # API key, tenant, login/logout
+│   │   └── linksSlice.ts # Links list, create, delete
+│   ├── index.ts
+│   └── hooks.ts
+├── types/
+│   └── api.ts            # TypeScript types for API responses
+├── App.tsx               # Route definitions
+└── main.tsx              # App entry + Redux Provider
+```
+
+---
+
+## User Flow
+
+```
+Sign Up → Save API Key → Dashboard
+                            │
+              ┌─────────────┼─────────────┐
+              ▼             ▼             ▼
+        Create Link    View Links     Profile
+              │             │
+              ▼             ▼
+         Copy URL     Track Clicks
+              │
+              ▼
+         Delete Link
+```
+
+---
+
+## Theme
+
+Light **corporate** theme is the default. Dark theme support is configured in DaisyUI and will be enabled with a toggle in a future update.
+
+---
+
+## Related Project
+
+| Project | Description | Port |
+|---------|-------------|------|
+| [Url-Shortner](../Url-Shortner) | Backend REST API | 3000 |
+| **Url-Shortner-Web** | Frontend dashboard (this repo) | 5173 |
+
+---
