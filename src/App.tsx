@@ -1,20 +1,41 @@
-import { useAppSelector } from './store/hooks'
+import { useEffect } from 'react'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
+import DashboardPage from './pages/DashboardPage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import { useAppDispatch, useAppSelector } from './store/hooks'
+import { fetchProfile } from './store/slices/authSlice'
 
-function App() {
-  const { apiKey, tenant, status } = useAppSelector((state) => state.auth)
+function AppRoutes() {
+  const dispatch = useAppDispatch()
+  const { apiKey, tenant } = useAppSelector((state) => state.auth)
+
+  useEffect(() => {
+    if (apiKey && !tenant) {
+      dispatch(fetchProfile())
+    }
+  }, [apiKey, tenant, dispatch])
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-      <div className="card w-full max-w-md bg-base-100 shadow-lg">
-        <div className="card-body items-center text-center">
-          <h1 className="card-title text-2xl text-primary">Redux Connected</h1>
-          <p className="text-sm">Status: {status}</p>
-          <p className="text-sm">Logged in: {apiKey ? 'Yes' : 'No'}</p>
-          <p className="text-sm">Tenant: {tenant?.name ?? 'None'}</p>
-        </div>
-      </div>
-    </div>
+    <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    </Routes>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  )
+}
