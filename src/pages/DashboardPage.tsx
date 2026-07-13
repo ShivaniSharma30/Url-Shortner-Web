@@ -4,12 +4,19 @@ export default function DashboardPage() {
   const tenant = useAppSelector((state) => state.auth.tenant)
 
   return (
-    <div className="min-h-screen bg-base-200 p-8">
-      <div className="card bg-base-100 shadow-lg max-w-2xl mx-auto">
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <p className="text-base-content/70 mt-1">
+          Welcome back, <span className="font-medium text-primary">{tenant?.name}</span>
+        </p>
+      </div>
+
+      <div className="card bg-base-100 shadow-sm border border-base-300">
         <div className="card-body">
-          <h1 className="card-title text-2xl text-primary">Dashboard Page</h1>
+          <h2 className="card-title">Coming in Step 9</h2>
           <p className="text-base-content/70">
-            Welcome, {tenant?.name ?? 'Tenant'} — we will build this in Step 9
+            Stats cards, create link form, and links table will be added here next.
           </p>
         </div>
       </div>

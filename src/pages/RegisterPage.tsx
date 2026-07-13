@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import AuthLayout from '../components/AuthLayout'
 import { setStoredApiKey } from '../api/axios'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
@@ -42,15 +43,15 @@ export default function RegisterPage() {
 
   if (registeredTenant) {
     return (
-      <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-        <div className="card w-full max-w-lg bg-base-100 shadow-lg border border-base-300">
+      <AuthLayout>
+        <div className="card bg-base-100 shadow-lg border border-base-300">
           <div className="card-body">
-            <h1 className="card-title text-2xl text-primary">Account Created</h1>
+            <h2 className="card-title text-2xl text-primary">You&apos;re all set!</h2>
             <p className="text-sm text-base-content/70">
-              Save your API key now. You will need it to log in again.
+              Save your API key now. You will need it to sign in again.
             </p>
 
-            <div className="alert alert-warning mt-2">
+            <div className="alert alert-warning mt-2 text-sm">
               <span>This key is shown only once. Store it safely.</span>
             </div>
 
@@ -69,24 +70,22 @@ export default function RegisterPage() {
               </div>
             </label>
 
-            <div className="card-actions justify-end mt-4">
-              <button type="button" className="btn btn-primary" onClick={handleContinue}>
-                Go to Dashboard
-              </button>
-            </div>
+            <button type="button" className="btn btn-primary w-full mt-4" onClick={handleContinue}>
+              Go to Dashboard
+            </button>
           </div>
         </div>
-      </div>
+      </AuthLayout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
-      <div className="card w-full max-w-md bg-base-100 shadow-lg border border-base-300">
+    <AuthLayout>
+      <div className="card bg-base-100 shadow-lg border border-base-300">
         <div className="card-body">
-          <h1 className="card-title text-2xl text-primary">Create Account</h1>
+          <h2 className="card-title text-2xl">Sign Up</h2>
           <p className="text-sm text-base-content/70">
-            Register your organization to start shortening URLs.
+            Create your organization account to start shortening URLs.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-2">
@@ -118,19 +117,21 @@ export default function RegisterPage() {
               {status === 'loading' ? (
                 <span className="loading loading-spinner loading-sm" />
               ) : (
-                'Register'
+                'Create Account'
               )}
             </button>
           </form>
 
-          <p className="text-center text-sm mt-4">
-            Already have an API key?{' '}
-            <Link to="/login" className="link link-primary">
-              Log in
+          <div className="divider text-xs">OR</div>
+
+          <p className="text-center text-sm">
+            Already have an account?{' '}
+            <Link to="/login" className="link link-primary font-medium">
+              Sign in
             </Link>
           </p>
         </div>
       </div>
-    </div>
+    </AuthLayout>
   )
 }
