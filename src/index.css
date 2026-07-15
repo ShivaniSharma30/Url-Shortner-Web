@@ -2,3 +2,110 @@
 @plugin "daisyui" {
   themes: corporate --default, dark;
 }
+
+/* Auth form card — same rounded shape in light and dark
+   (corporate theme defaults to almost square; force radius for both) */
+.auth-form-card.card {
+  border-radius: 1.1rem !important;
+  overflow: hidden;
+}
+
+/* ---------- Dark auth pages: polished form side ---------- */
+
+[data-theme="dark"] .auth-brand-panel {
+  background-color: oklch(18% 0.02 260);
+  border-color: oklch(32% 0.025 260);
+}
+
+[data-theme="dark"] .auth-form-panel {
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 20%, oklch(42% 0.12 265 / 0.28), transparent 55%),
+    radial-gradient(ellipse 60% 50% at 20% 90%, oklch(35% 0.08 230 / 0.18), transparent 50%),
+    oklch(15% 0.018 260);
+}
+
+[data-theme="dark"] .auth-form-card {
+  background: linear-gradient(
+    165deg,
+    oklch(27% 0.022 260) 0%,
+    oklch(23% 0.018 260) 100%
+  );
+  border: 1px solid oklch(100% 0 0 / 0.12);
+  border-radius: 1.1rem;
+  box-shadow:
+    0 1px 0 oklch(100% 0 0 / 0.06) inset,
+    0 24px 48px -12px oklch(0% 0 0 / 0.55);
+}
+
+[data-theme="dark"] .auth-form-card .card-body {
+  padding: 1.75rem 1.75rem 1.5rem;
+}
+
+[data-theme="dark"] .auth-form-card .auth-eyebrow {
+  color: oklch(78% 0.1 265);
+}
+
+[data-theme="dark"] .auth-form-card .card-title {
+  color: oklch(97% 0.01 260);
+  letter-spacing: -0.02em;
+}
+
+[data-theme="dark"] .auth-form-card .auth-subtitle {
+  color: oklch(78% 0.02 260);
+}
+
+[data-theme="dark"] .auth-form-card .label-text {
+  color: oklch(86% 0.02 260);
+  font-size: 0.875rem;
+}
+
+[data-theme="dark"] .auth-form-card .input,
+[data-theme="dark"] .auth-form-card .join .input {
+  background-color: oklch(16% 0.015 260);
+  border-color: oklch(100% 0 0 / 0.14);
+  color: oklch(95% 0.01 260);
+  border-radius: 0.65rem;
+}
+
+[data-theme="dark"] .auth-form-card .input::placeholder {
+  color: oklch(55% 0.02 260);
+}
+
+[data-theme="dark"] .auth-form-card .input:focus,
+[data-theme="dark"] .auth-form-card .join .input:focus {
+  background-color: oklch(18% 0.018 260);
+  border-color: oklch(68% 0.16 265);
+  outline: none;
+  box-shadow: 0 0 0 3px oklch(65% 0.14 265 / 0.28);
+}
+
+[data-theme="dark"] .auth-form-card .btn-primary {
+  border: none;
+  box-shadow: 0 8px 20px oklch(55% 0.18 265 / 0.35);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .auth-form-card .btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+[data-theme="dark"] .auth-form-card .divider {
+  color: oklch(55% 0.02 260);
+}
+
+[data-theme="dark"] .auth-form-card .divider::before,
+[data-theme="dark"] .auth-form-card .divider::after {
+  background-color: oklch(100% 0 0 / 0.1);
+}
+
+[data-theme="dark"] .auth-form-card .auth-footer {
+  color: oklch(72% 0.02 260);
+}
+
+[data-theme="dark"] .auth-form-card .link-primary {
+  color: oklch(78% 0.14 265);
+}
+
+[data-theme="dark"] .auth-form-card .link-primary:hover {
+  color: oklch(85% 0.14 265);
+}

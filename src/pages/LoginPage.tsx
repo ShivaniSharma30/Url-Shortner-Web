@@ -26,19 +26,22 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-      <div className="card bg-base-100 shadow-lg border border-base-300">
+      <div className="auth-form-card card bg-base-100 shadow-xl border border-base-300 rounded-2xl">
         <div className="card-body">
-          <h2 className="card-title text-2xl">Sign In</h2>
-          <p className="text-sm text-base-content/70">
-            Welcome back! Enter your API key to continue.
+          <p className="auth-eyebrow text-xs font-semibold uppercase tracking-wider text-primary mb-1">
+            Welcome back
+          </p>
+          <h2 className="card-title text-2xl sm:text-3xl">Sign In</h2>
+          <p className="auth-subtitle text-sm mb-4">
+            Enter your API key to open your dashboard.
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-4 mt-2">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <label className="form-control w-full">
-              <span className="label-text font-medium">API Key</span>
+              <span className="label-text font-medium mb-1.5 block">API Key</span>
               <input
                 type="text"
-                className="input input-bordered w-full font-mono text-sm"
+                className="input input-bordered w-full font-mono text-sm h-11"
                 placeholder="us_..."
                 value={apiKeyInput}
                 onChange={(event) => setApiKeyInput(event.target.value)}
@@ -54,7 +57,7 @@ export default function LoginPage() {
 
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn btn-primary w-full h-11"
               disabled={status === 'loading'}
             >
               {status === 'loading' ? (
@@ -65,11 +68,11 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="divider text-xs">OR</div>
+          <div className="divider text-xs my-5">OR</div>
 
-          <p className="text-center text-sm">
+          <p className="auth-footer text-center text-sm">
             Don&apos;t have an account?{' '}
-            <Link to="/register" className="link link-primary font-medium">
+            <Link to="/register" className="link link-primary font-semibold no-underline hover:underline">
               Sign up
             </Link>
           </p>

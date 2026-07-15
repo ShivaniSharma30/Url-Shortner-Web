@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import AvatarInitials from '../components/AvatarInitials'
 import { useAppSelector } from '../store/hooks'
 
 function formatDate(value: string): string {
@@ -15,21 +17,20 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">My Profile</h1>
-        <p className="text-base-content/70 mt-1">Your organization account details</p>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold">My Profile</h1>
+          <p className="text-base-content/70 mt-1">Your organization account details</p>
+        </div>
+        <Link to="/dashboard" className="btn btn-primary shrink-0">
+          Go to Dashboard
+        </Link>
       </div>
 
-      <div className="card bg-base-100 shadow-sm border border-base-300">
+      <div className="card bg-base-100 shadow-sm border border-base-300 rounded-2xl">
         <div className="card-body">
           <div className="flex items-center gap-4 mb-4">
-            <div className="avatar placeholder">
-              <div className="bg-primary text-primary-content rounded-full w-16">
-                <span className="text-xl font-bold">
-                  {tenant.name.slice(0, 2).toUpperCase()}
-                </span>
-              </div>
-            </div>
+            <AvatarInitials name={tenant.name} size="w-16 h-16" textClass="text-xl" />
             <div>
               <h2 className="text-2xl font-semibold">{tenant.name}</h2>
               <p className="text-sm text-base-content/60">Organization account</p>

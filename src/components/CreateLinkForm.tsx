@@ -73,16 +73,13 @@ export default function CreateLinkForm() {
           </label>
 
           <label className="form-control w-full">
-            <span className="label-text font-medium">Expires at (optional)</span>
+            <span className="label-text font-medium mb-1.5 block">Expires at (optional)</span>
             <input
               type="datetime-local"
               className="input input-bordered w-full"
               value={expiresAt}
               onChange={(event) => setExpiresAt(event.target.value)}
             />
-            <span className="label-text-alt text-base-content/50 mt-1">
-              Leave empty for a link that never expires
-            </span>
           </label>
 
           {createError && (
@@ -91,20 +88,25 @@ export default function CreateLinkForm() {
             </div>
           )}
 
-          <button
-            type="submit"
-            className="btn btn-primary w-full sm:w-auto"
-            disabled={createStatus === 'loading'}
-          >
-            {createStatus === 'loading' ? (
-              <>
-                <span className="loading loading-spinner loading-sm" />
-                Creating...
-              </>
-            ) : (
-              'Shorten URL'
-            )}
-          </button>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1">
+            <span className="text-sm text-base-content/50">
+              Leave empty for a link that never expires
+            </span>
+            <button
+              type="submit"
+              className="btn btn-primary btn-sm h-9 min-h-9 px-4"
+              disabled={createStatus === 'loading'}
+            >
+              {createStatus === 'loading' ? (
+                <>
+                  <span className="loading loading-spinner loading-sm" />
+                  Creating...
+                </>
+              ) : (
+                'Shorten URL'
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>

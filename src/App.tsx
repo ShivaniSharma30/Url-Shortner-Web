@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import AppLayout from './components/AppLayout'
 import ProtectedRoute from './components/ProtectedRoute'
+import ThemeSync from './components/ThemeSync'
 import DashboardPage from './pages/DashboardPage'
 import LoginPage from './pages/LoginPage'
 import ProfilePage from './pages/ProfilePage'
@@ -40,6 +41,7 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ThemeSync />
       <AppRoutes />
     </BrowserRouter>
   )
