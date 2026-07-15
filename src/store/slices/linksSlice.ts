@@ -9,7 +9,6 @@ interface LinksState {
   createStatus: 'idle' | 'loading' | 'succeeded' | 'failed'
   deleteStatus: 'idle' | 'loading' | 'succeeded' | 'failed'
   error: string | null
-  createError: string | null
   deleteError: string | null
 }
 
@@ -27,7 +26,6 @@ const initialState: LinksState = {
   createStatus: 'idle',
   deleteStatus: 'idle',
   error: null,
-  createError: null,
   deleteError: null,
 }
 
@@ -73,17 +71,13 @@ const linksSlice = createSlice({
   reducers: {
     resetCreateStatus(state) {
       state.createStatus = 'idle'
-      state.createError = null
     },
     resetDeleteStatus(state) {
       state.deleteStatus = 'idle'
       state.deleteError = null
     },
-    clearLinks(state) {
-      state.items = []
-      state.pagination = emptyPagination
-      state.status = 'idle'
-      state.error = null
+    clearLinks() {
+      return initialState
     },
   },
   extraReducers: (builder) => {
@@ -105,16 +99,14 @@ const linksSlice = createSlice({
     builder
       .addCase(addLink.pending, (state) => {
         state.createStatus = 'loading'
-        state.createError = null
       })
       .addCase(addLink.fulfilled, (state, action) => {
         state.createStatus = 'succeeded'
         state.items = [action.payload, ...state.items]
         state.pagination.total += 1
       })
-      .addCase(addLink.rejected, (state, action) => {
+      .addCase(addLink.rejected, (state) => {
         state.createStatus = 'failed'
-        state.createError = action.payload as string
       })
 
     builder

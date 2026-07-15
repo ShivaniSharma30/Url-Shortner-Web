@@ -5,7 +5,7 @@ import { showToast } from '../store/slices/uiSlice'
 
 export default function CreateLinkForm() {
   const dispatch = useAppDispatch()
-  const { createStatus, createError } = useAppSelector((state) => state.links)
+  const createStatus = useAppSelector((state) => state.links.createStatus)
 
   const [originalUrl, setOriginalUrl] = useState('')
   const [title, setTitle] = useState('')
@@ -36,6 +36,7 @@ export default function CreateLinkForm() {
           type: 'error',
         }),
       )
+      dispatch(resetCreateStatus())
     }
   }
 
@@ -81,12 +82,6 @@ export default function CreateLinkForm() {
               onChange={(event) => setExpiresAt(event.target.value)}
             />
           </label>
-
-          {createError && (
-            <div className="alert alert-error text-sm py-2">
-              <span>{createError}</span>
-            </div>
-          )}
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1">
             <span className="text-sm text-base-content/50">

@@ -1,7 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthLayout from '../components/AuthLayout'
-import { setStoredApiKey } from '../api/axios'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import {
   clearRegistration,
@@ -32,10 +31,10 @@ export default function RegisterPage() {
   const handleContinue = async () => {
     if (!registeredTenant?.apiKey) return
 
-    setStoredApiKey(registeredTenant.apiKey)
+    const apiKey = registeredTenant.apiKey
     dispatch(clearRegistration())
 
-    const result = await dispatch(loginWithApiKey(registeredTenant.apiKey))
+    const result = await dispatch(loginWithApiKey(apiKey))
     if (loginWithApiKey.fulfilled.match(result)) {
       navigate('/dashboard')
     }
