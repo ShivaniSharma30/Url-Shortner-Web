@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { addLink, resetCreateStatus } from '../store/slices/linksSlice'
+import { showToast } from '../store/slices/uiSlice'
 
 export default function CreateLinkForm() {
   const dispatch = useAppDispatch()
@@ -23,6 +24,15 @@ export default function CreateLinkForm() {
     if (addLink.fulfilled.match(result)) {
       setOriginalUrl('')
       setTitle('')
+      dispatch(showToast({ message: 'Short link created!', type: 'success' }))
+      dispatch(resetCreateStatus())
+    } else if (addLink.rejected.match(result)) {
+      dispatch(
+        showToast({
+          message: (result.payload as string) || 'Failed to create link',
+          type: 'error',
+        }),
+      )
     }
   }
 
@@ -65,19 +75,16 @@ export default function CreateLinkForm() {
             </div>
           )}
 
-          {createStatus === 'succeeded' && (
-            <div className="alert alert-success text-sm py-2">
-              <span>Short link created successfully!</span>
-            </div>
-          )}
-
           <button
             type="submit"
             className="btn btn-primary w-full sm:w-auto"
             disabled={createStatus === 'loading'}
           >
             {createStatus === 'loading' ? (
-              <span className="loading loading-spinner loading-sm" />
+              <>
+                <span className="loading loading-spinner loading-sm" />
+                Creating...
+              </>
             ) : (
               'Shorten URL'
             )}
