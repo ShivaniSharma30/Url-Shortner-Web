@@ -26,7 +26,7 @@ export default function Header() {
 
   return (
     <header className="navbar bg-base-100 border-b border-base-300 px-4 lg:px-8 min-h-16 sticky top-0 z-50">
-      <div className="flex-1 gap-3">
+      <div className="navbar-start flex-1 gap-3">
         <Link to={isLoggedIn ? '/dashboard' : '/login'} className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary text-primary-content flex items-center justify-center font-bold text-lg shadow-sm">
             US
@@ -40,15 +40,17 @@ export default function Header() {
         </Link>
       </div>
 
-      <div className="flex-none gap-2 items-center">
-        <label className="swap swap-rotate btn btn-ghost btn-sm btn-circle" title={isDark ? 'Switch to light' : 'Switch to dark'}>
+      <div className="navbar-end flex flex-row flex-nowrap items-center gap-2 shrink-0">
+        <label
+          className="swap swap-rotate btn btn-ghost btn-sm btn-circle shrink-0"
+          title={isDark ? 'Switch to light' : 'Switch to dark'}
+        >
           <input
             type="checkbox"
             checked={isDark}
             onChange={handleToggleTheme}
             aria-label="Toggle dark mode"
           />
-          {/* sun icon — shown in light mode (when unchecked / corporate) */}
           <svg
             className="swap-off fill-current w-5 h-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +58,6 @@ export default function Header() {
           >
             <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
           </svg>
-          {/* moon icon — shown in dark mode */}
           <svg
             className="swap-on fill-current w-5 h-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -67,26 +68,54 @@ export default function Header() {
         </label>
 
         {isLoggedIn && tenant ? (
-          <>
-            <div className="hidden md:flex items-center gap-2 mr-1">
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost h-auto min-h-0 py-1.5 px-2 gap-2"
+            >
               <AvatarInitials name={tenant.name} size="w-9 h-9" textClass="text-xs" />
-              <span className="text-sm font-medium">
-                Hello, <span className="text-primary">{tenant.name}</span>
-              </span>
+              <div className="hidden sm:flex flex-col items-start text-left leading-tight">
+                <span className="text-xs text-base-content/60">Hello</span>
+                <span className="text-sm font-semibold text-primary max-w-[140px] truncate">
+                  {tenant.name}
+                </span>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 opacity-60 hidden sm:block"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
-            <Link to="/profile" className="btn btn-ghost btn-sm">
-              Profile
-            </Link>
-            <button type="button" className="btn btn-outline btn-sm" onClick={handleLogout}>
-              Logout
-            </button>
-          </>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-100 rounded-box z-50 mt-2 w-52 p-2 shadow-lg border border-base-300"
+            >
+              <li className="menu-title px-3 pt-1 pb-0">
+                <span className="text-xs font-normal text-base-content/50 normal-case tracking-normal">
+                  Account
+                </span>
+              </li>
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li>
+                <button type="button" onClick={handleLogout} className="text-error">
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
         ) : (
           <>
-            <Link to="/login" className="btn btn-ghost btn-sm">
+            <Link to="/login" className="btn btn-ghost btn-sm shrink-0">
               Sign In
             </Link>
-            <Link to="/register" className="btn btn-primary btn-sm">
+            <Link to="/register" className="btn btn-primary btn-sm shrink-0">
               Sign Up
             </Link>
           </>

@@ -185,13 +185,15 @@ Sign Up → Save API Key → Dashboard
          Delete Link
 ```
 
----
 
 ## Theme
 
-Light **corporate** theme is the default. Dark theme support is configured in DaisyUI and will be enabled with a toggle in a future update.
+- **Light:** DaisyUI `corporate` (default)
+- **Dark:** DaisyUI `dark`
+- Toggle in the header (persisted in `localStorage`)
 
 ---
+
 
 ## Related Project
 
