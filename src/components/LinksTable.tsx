@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { removeLink, resetDeleteStatus } from '../store/slices/linksSlice'
+import { loadLinks, removeLink, resetDeleteStatus } from '../store/slices/linksSlice'
 import { showToast } from '../store/slices/uiSlice'
 
 function formatDate(value: string): string {
@@ -11,9 +11,19 @@ function formatDate(value: string): string {
   })
 }
 
+function formatDateTime(value: string): string {
+  return new Date(value).toLocaleString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
 export default function LinksTable() {
   const dispatch = useAppDispatch()
-  const { items, status, error, deleteStatus, deleteError } = useAppSelector(
+  const { items, status, error, deleteStatus, deleteError, pagination } = useAppSelector(
     (state) => state.links,
   )
 
@@ -28,6 +38,11 @@ export default function LinksTable() {
       dispatch(resetDeleteStatus())
     }
   }, [deleteStatus, deleteError, dispatch])
+
+  const goToPage = (page: number) => {
+    if (page < 1 || page > pagination.totalPages) return
+    dispatch(loadLinks({ page, limit: pagination.limit || 20 }))
+  }
 
   const handleCopy = async (shortUrl: string) => {
     try {
@@ -44,7 +59,7 @@ export default function LinksTable() {
     }
   }
 
-  if (status === 'loading') {
+  if (status === 'loading' && items.length === 0) {
     return (
       <div className="card bg-base-100 shadow-sm border border-base-300">
         <div className="card-body items-center py-16 gap-3">
@@ -84,7 +99,7 @@ export default function LinksTable() {
       <div className="card-body">
         <div className="flex items-center justify-between gap-2">
           <h2 className="card-title">Your Links</h2>
-          <span className="badge badge-ghost">{items.length} active</span>
+          <span className="badge badge-ghost">{pagination.total} total</span>
         </div>
         <table className="table table-zebra">
           <thead>
@@ -94,6 +109,7 @@ export default function LinksTable() {
               <th>Title</th>
               <th>Clicks</th>
               <th>Created</th>
+              <th>Expires</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -118,6 +134,9 @@ export default function LinksTable() {
                   <span className="badge badge-ghost">{link.clicks}</span>
                 </td>
                 <td>{formatDate(link.createdAt)}</td>
+                <td>
+                  {link.expiresAt ? formatDateTime(link.expiresAt) : '—'}
+                </td>
                 <td>
                   <div className="flex gap-2">
                     <button
@@ -145,6 +164,35 @@ export default function LinksTable() {
             ))}
           </tbody>
         </table>
+
+        {pagination.totalPages > 1 && (
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-4">
+            <p className="text-sm text-base-content/60">
+              Page {pagination.page} of {pagination.totalPages} · {pagination.total} links
+            </p>
+            <div className="join">
+              <button
+                type="button"
+                className="btn btn-sm join-item"
+                disabled={pagination.page <= 1 || status === 'loading'}
+                onClick={() => goToPage(pagination.page - 1)}
+              >
+                Prev
+              </button>
+              <button type="button" className="btn btn-sm join-item btn-ghost no-animation">
+                {pagination.page}
+              </button>
+              <button
+                type="button"
+                className="btn btn-sm join-item"
+                disabled={pagination.page >= pagination.totalPages || status === 'loading'}
+                onClick={() => goToPage(pagination.page + 1)}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -40,4 +40,5 @@ export interface LinksListData {
 export interface CreateLinkPayload {
   originalUrl: string
   title?: string
+  expiresAt?: string
 }

@@ -9,6 +9,7 @@ export default function CreateLinkForm() {
 
   const [originalUrl, setOriginalUrl] = useState('')
   const [title, setTitle] = useState('')
+  const [expiresAt, setExpiresAt] = useState('')
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -18,12 +19,14 @@ export default function CreateLinkForm() {
       addLink({
         originalUrl: originalUrl.trim(),
         title: title.trim() || undefined,
+        expiresAt: expiresAt ? new Date(expiresAt).toISOString() : undefined,
       }),
     )
 
     if (addLink.fulfilled.match(result)) {
       setOriginalUrl('')
       setTitle('')
+      setExpiresAt('')
       dispatch(showToast({ message: 'Short link created!', type: 'success' }))
       dispatch(resetCreateStatus())
     } else if (addLink.rejected.match(result)) {
@@ -67,6 +70,19 @@ export default function CreateLinkForm() {
               onChange={(event) => setTitle(event.target.value)}
               maxLength={255}
             />
+          </label>
+
+          <label className="form-control w-full">
+            <span className="label-text font-medium">Expires at (optional)</span>
+            <input
+              type="datetime-local"
+              className="input input-bordered w-full"
+              value={expiresAt}
+              onChange={(event) => setExpiresAt(event.target.value)}
+            />
+            <span className="label-text-alt text-base-content/50 mt-1">
+              Leave empty for a link that never expires
+            </span>
           </label>
 
           {createError && (
