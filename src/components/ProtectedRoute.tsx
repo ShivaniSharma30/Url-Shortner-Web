@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import { useAppSelector } from '../store/hooks'
+import { AppShellSkeleton } from './LoadingSkeletons'
 
 export default function ProtectedRoute() {
   const { apiKey, tenant, status } = useAppSelector((state) => state.auth)
@@ -9,11 +10,7 @@ export default function ProtectedRoute() {
   }
 
   if (status === 'loading' && !tenant) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-base-200">
-        <span className="loading loading-spinner loading-lg text-primary" />
-      </div>
-    )
+    return <AppShellSkeleton />
   }
 
   if (!tenant) {

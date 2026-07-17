@@ -1,9 +1,15 @@
 import { useAppSelector } from '../store/hooks'
+import { StatsCardsSkeleton } from './LoadingSkeletons'
 
 export default function StatsCards() {
   const items = useAppSelector((state) => state.links.items)
+  const status = useAppSelector((state) => state.links.status)
   const totalLinks = useAppSelector((state) => state.links.pagination.total)
   const totalClicks = items.reduce((sum, link) => sum + link.clicks, 0)
+
+  if (status === 'loading' && items.length === 0) {
+    return <StatsCardsSkeleton />
+  }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

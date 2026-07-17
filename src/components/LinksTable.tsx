@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { loadLinks, removeLink, resetDeleteStatus } from '../store/slices/linksSlice'
 import { showToast } from '../store/slices/uiSlice'
+import { LinksTableSkeleton } from './LoadingSkeletons'
 
 function formatDate(value: string): string {
   return new Date(value).toLocaleDateString('en-IN', {
@@ -60,14 +61,7 @@ export default function LinksTable() {
   }
 
   if (status === 'loading' && items.length === 0) {
-    return (
-      <div className="card bg-base-100 shadow-sm border border-base-300">
-        <div className="card-body items-center py-16 gap-3">
-          <span className="loading loading-spinner loading-lg text-primary" />
-          <p className="text-sm text-base-content/60">Loading your links...</p>
-        </div>
-      </div>
-    )
+    return <LinksTableSkeleton />
   }
 
   if (error) {
@@ -94,9 +88,11 @@ export default function LinksTable() {
     )
   }
 
+  const isRefreshing = status === 'loading' && items.length > 0
+
   return (
     <div className="card bg-base-100 shadow-sm border border-base-300 overflow-x-auto">
-      <div className="card-body">
+      <div className={`card-body transition-opacity ${isRefreshing ? 'opacity-50' : ''}`}>
         <div className="flex items-center justify-between gap-2">
           <h2 className="card-title">Your Links</h2>
           <span className="badge badge-ghost">{pagination.total} total</span>
